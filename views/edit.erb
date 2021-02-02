@@ -1,1 +1,15 @@
-<h1>Edit</h1>
+<div class="edit-page">
+  <form class="edit-page-form" action="/memos" method="post">
+    <div class="edit-page-input-tite">
+      <label class="edit-page-input-tite__label edit-page-input-label">タイトル</label>
+      <input class="edit-page-input-tite__item" type="text" name="title">
+    </div>
+    <div class="edit-page-input-content">
+      <label class="edit-page-input-content__label edit-page-input-label">内容</label>
+      <textarea class="edit-page-input-content__item" name="content"></textarea>
+    </div>
+    <div class="edit-page-submit">
+      <button class="edit-page-submit__button" type="submit">更新</button>
+    </div>
+  </form>
+</div>
