@@ -1,12 +1,12 @@
 <div class="top-page">
   <div class="top-page-new-link">
-    <a class="top-page-new-link__button" href="">New Memo</a>
+    <a class="top-page-new-link__button" href="/memos/new">New Memo</a>
   </div>
   <ul class="top-page-memo-list">
-    <li class="top-page-memo-list__item"><a class="top-page-memo-list__link" href="">Memo1</a></li>
-    <li class="top-page-memo-list__item"><a class="top-page-memo-list__link" href="">Memo2</a></li>
-    <li class="top-page-memo-list__item"><a class="top-page-memo-list__link" href="">Memo3</a></li>
-    <li class="top-page-memo-list__item"><a class="top-page-memo-list__link" href="">Memo4</a></li>
-    <li class="top-page-memo-list__item"><a class="top-page-memo-list__link" href="">Memo5</a></li>
+    <% @memos.each do |memo| %>
+      <li class="top-page-memo-list__item">
+        <a class="top-page-memo-list__link" href="/memos/<%= memo.id %>"><%= h(memo.title) %></a>
+      </li>
+    <% end %>
   </ul>
 </div>
