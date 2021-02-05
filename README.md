@@ -10,7 +10,7 @@ git clone -b [ブランチ名] https://github.com/siso25/sinatra-practice.git
 ```bash
 cd sinatra-practice
 ```
-1. gemのインストールを行います。
+3. gemのインストールを行います。
 ```bash
 bundle install --path vendor/bundle
 ```
