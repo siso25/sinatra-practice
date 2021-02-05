@@ -3,50 +3,59 @@ require 'json'
 class Memo
   attr_accessor :id, :title, :content
 
+  MemoDataFilePath = "./data/memos.json"
+  CurrentIdFilePath = "./data/current_id.json"
+
   class << self
     def all
-      memos = File.open("./memos.json") { |file| JSON.load(file) }["memos"]
-      memos.map do |memo|
-        Memo.new(id: memo["id"], title: memo["title"], content: memo["content"])
-      end
+      memos = load_json_file(MemoDataFilePath)["memos"]
+      memos.map {|memo| self.new(id: memo["id"], title: memo["title"], content: memo["content"])}
     end
 
     def find(id)
-      memos = self.all
+      memos = all
       memos.find {|memo| memo.id == id.to_i}
     end
 
     def delete(id)
-      memos = self.all
+      memos = all
       memos.delete_if {|memo| memo.id == id.to_i}
-      self.write_memos(memos)
+      write_memos(memos)
     end
 
     def create(title: , content: )
-      memos = self.all
       next_id = calc_next_id
-      write_max_memo_id(next_id)
-
+      memos = all
       memo = self.new(id: next_id, title: title, content: content)
       memos << memo
-      self.write_memos(memos)
+
+      write_next_id(next_id)
+      write_memos(memos)
     end
 
     def write_memos(memos)
       memos_array = memos.map {|memo| {"id"=>memo.id, "title"=>memo.title, "content"=>memo.content}}
       memos_hash = { "memos" => memos_array }
-      File.open("./memos.json", "w") { |file| JSON.dump(memos_hash, file) }
+      write_json_file(MemoDataFilePath, memos_hash)
     end
 
     private
       def calc_next_id
-        current_id = File.open("./max_memo_id.json") { |file| JSON.load(file) }["max_id"]
+        current_id = load_json_file(CurrentIdFilePath)["current_id"]
         current_id.next
       end
 
-      def write_max_memo_id(next_id)
-        max_id_hash = {"max_id" => next_id}
-        File.open("./max_memo_id.json", "w") { |file| JSON.dump(max_id_hash, file) }
+      def write_next_id(next_id)
+        current_id_hash = {"current_id" => next_id}
+        write_json_file(CurrentIdFilePath, current_id_hash)
+      end
+
+      def load_json_file(file_path)
+        File.open(file_path) {|file| JSON.load(file)}
+      end
+
+      def write_json_file(file_path, hash)
+        File.open(file_path, "w") { |file| JSON.dump(hash, file) }
       end
   end
 

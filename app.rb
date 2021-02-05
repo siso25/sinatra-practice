@@ -1,7 +1,6 @@
 require 'sinatra'
 require 'sinatra/reloader'
-require './memo.rb'
-require 'json'
+require './lib/memo.rb'
 require 'erb'
 include ERB::Util
 
