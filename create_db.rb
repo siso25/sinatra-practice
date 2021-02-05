@@ -2,11 +2,12 @@ require 'pg'
 
 create_sql =<<~SQL
   CREATE TABLE posts (
-    id INTEGER PRIMARY KEY,
+    id SERIAL NOT NULL,
     title TEXT NOT NULL,
     content TEXT,
     created_at TIMESTAMP,
-    udpated_at TIMESTAMP
+    updated_at TIMESTAMP,
+    PRIMARY KEY (id)
   )
 SQL
 

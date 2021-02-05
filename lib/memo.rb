@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
-require 'json'
+require 'pg'
 
 class Memo
   attr_accessor :id, :title, :content
 
-  MEMO_DATA_FILE_PATH = './data/memos.json'
-  CURRENT_ID_FILE_PATH = './data/current_id.json'
-
   class << self
     def all
-      memos = load_json_file(MEMO_DATA_FILE_PATH)['memos']
-      memos.map { |memo| new(id: memo['id'], title: memo['title'], content: memo['content']) }
+      connection = PG.connect( dbname: 'sinatra_db' )
+      result_rows = connection.exec('SELECT * FROM posts ORDER BY id;')
+      memos = []
+      result_rows.each do |row|
+        memos << new(id: row['id'].to_i, title: row['title'], content: row['content'])
+      end
+      memos
     end
 
     def find(id)
@@ -20,45 +22,16 @@ class Memo
     end
 
     def delete(id)
-      memos = all
-      memos.delete_if { |memo| memo.id == id.to_i }
-      write_memos(memos)
+      connection = PG.connect( dbname: 'sinatra_db' )
+      connection.exec( 'DELETE FROM posts WHERE id = $1;', [id.to_i] )
     end
 
     def create(title:, content:)
-      next_id = calc_next_id
-      memos = all
-      memo = new(id: next_id, title: title, content: content)
-      memos << memo
-
-      write_next_id(next_id)
-      write_memos(memos)
-    end
-
-    def write_memos(memos)
-      memos_array = memos.map { |memo| { 'id' => memo.id, 'title' => memo.title, 'content' => memo.content } }
-      memos_hash = { 'memos' => memos_array }
-      write_json_file(MEMO_DATA_FILE_PATH, memos_hash)
-    end
-
-    private
-
-    def calc_next_id
-      current_id = load_json_file(CURRENT_ID_FILE_PATH)['current_id']
-      current_id.next
-    end
-
-    def write_next_id(next_id)
-      current_id_hash = { 'current_id' => next_id }
-      write_json_file(CURRENT_ID_FILE_PATH, current_id_hash)
-    end
-
-    def load_json_file(file_path)
-      File.open(file_path) { |file| JSON.parse(file.read) }
-    end
-
-    def write_json_file(file_path, hash)
-      File.open(file_path, 'w') { |file| JSON.dump(hash, file) }
+      connection = PG.connect( dbname: 'sinatra_db' )
+      connection.exec(
+        'INSERT INTO posts ( title, content, created_at, updated_at ) VALUES ( $1, $2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP );',
+        [title, content]
+      )
     end
   end
 
@@ -69,11 +42,10 @@ class Memo
   end
 
   def update(title:, content:)
-    memos = Memo.all
-    memo = memos.find { |m| m.id == @id.to_i }
-    memo.title = title
-    memo.content = content
-
-    Memo.write_memos(memos)
+    connection = PG.connect( dbname: 'sinatra_db' )
+    connection.exec(
+      'UPDATE posts SET title = $1, content = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3;',
+      [title, content, @id]
+    )
   end
 end
