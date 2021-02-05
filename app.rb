@@ -46,3 +46,7 @@ get '/memos/:memo_id/edit' do
   @memo = Memo.find(params[:memo_id])
   erb :edit
 end
+
+not_found do
+  erb :not_found
+end
