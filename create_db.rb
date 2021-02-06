@@ -1,7 +1,7 @@
 require 'pg'
 
-create_sql =<<~SQL
-  CREATE TABLE posts (
+create_sql =<<~SQL.gsub(/\n/, '')
+  CREATE TABLE memos (
     id SERIAL NOT NULL,
     title TEXT NOT NULL,
     content TEXT,
@@ -12,4 +12,8 @@ create_sql =<<~SQL
 SQL
 
 connection = PG.connect( dbname: 'sinatra_db' )
-connection.exec( create_sql.gsub(/\n/, '') )
+begin
+  connection.exec( create_sql )
+ensure
+  connection.finish
+end
