@@ -32,10 +32,10 @@ module MemoPg
 
   private
 
-  def execute(sql, params=[])
-    connection = PG.connect( dbname: DB_NAME )
+  def execute(sql, params = [])
+    connection = PG.connect(dbname: DB_NAME)
     begin
-      connection.exec( sql, params )
+      connection.exec(sql, params)
     ensure
       connection.finish
     end

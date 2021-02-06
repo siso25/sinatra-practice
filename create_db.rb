@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'pg'
 
-create_sql =<<~SQL.gsub(/\n/, '')
+create_sql = <<~SQL.delete("\n")
   CREATE TABLE memos (
     id SERIAL NOT NULL,
     title TEXT NOT NULL,
@@ -11,9 +13,9 @@ create_sql =<<~SQL.gsub(/\n/, '')
   )
 SQL
 
-connection = PG.connect( dbname: 'sinatra_db' )
+connection = PG.connect(dbname: 'sinatra_db')
 begin
-  connection.exec( create_sql )
+  connection.exec(create_sql)
 ensure
   connection.finish
 end
