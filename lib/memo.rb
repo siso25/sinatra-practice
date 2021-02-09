@@ -3,7 +3,7 @@
 require 'json'
 
 class Memo
-  attr_accessor :id, :title, :content
+  attr_reader :id, :title, :content
 
   MEMO_DATA_FILE_PATH = './data/memos.json'
   CURRENT_ID_FILE_PATH = './data/current_id.json'
@@ -69,10 +69,12 @@ class Memo
   end
 
   def update(title:, content:)
+    @title = title
+    @content = content
+
     memos = Memo.all
-    memo = memos.find { |m| m.id == @id.to_i }
-    memo.title = title
-    memo.content = content
+    memo_index = memos.index { |m| m.id == @id.to_i }
+    memos[memo_index] = self
 
     Memo.write_memos(memos)
   end

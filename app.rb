@@ -12,6 +12,10 @@ helpers do
   end
 end
 
+get '/' do
+  redirect to('/memos')
+end
+
 get '/memos' do
   @memos = Memo.all
   erb :index
