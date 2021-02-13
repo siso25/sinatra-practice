@@ -1,0 +1,12 @@
+<div class="top-page">
+  <div class="top-page-new-link">
+    <a class="top-page-new-link__button" href="/memos/new">メモを作成</a>
+  </div>
+  <ul class="top-page-memo-list">
+    <% @memos.each do |memo| %>
+      <li class="top-page-memo-list__item">
+        <a class="top-page-memo-list__link" href="/memos/<%= memo.id %>"><%= h(memo.title) %></a>
+      </li>
+    <% end %>
+  </ul>
+</div>

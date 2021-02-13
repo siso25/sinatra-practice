@@ -1,0 +1,16 @@
+<div class="edit-page">
+  <form class="edit-page-form" action="/memos/<%= @memo.id %>" method="post">
+    <input type="hidden" name="_method" value="PATCH">
+    <div class="edit-page-input-tite">
+      <label class="edit-page-input-tite__label edit-page-input-label" for="edit-page-title">タイトル</label>
+      <input class="edit-page-input-tite__item" type="text" name="title" id="edit-page-title" value="<%= h(@memo.title) %>" required="required">
+    </div>
+    <div class="edit-page-input-content">
+      <label class="edit-page-input-content__label edit-page-input-label" for="edit-page-content">内容</label>
+      <textarea class="edit-page-input-content__item" name="content" id="edit-page-content"><%= h(@memo.content) %></textarea>
+    </div>
+    <div class="edit-page-submit">
+      <button class="edit-page-submit__button" type="submit">更新</button>
+    </div>
+  </form>
+</div>
