@@ -14,8 +14,12 @@ cd sinatra-practice
 ```bash
 bundle install --path vendor/bundle
 ```
-4. Sinatraアプリケーションを起動します。
+4. アプリケーションで使用するDBを作成します。
+```bash
+bundle exec ruby create_db.rb
+```
+5. Sinatraアプリケーションを起動します。
 ```bash
 bundle exec ruby app.rb
 ```
-5. ブラウザにて```http://localhost:4567/memos```にアクセスしてください。
+6. ブラウザにて```http://localhost:4567/memos```にアクセスしてください。
